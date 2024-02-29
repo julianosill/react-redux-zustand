@@ -1,10 +1,19 @@
-import { Header } from '../store/components/header'
-import { Module } from '../store/components/module'
-import { Video } from '../store/components/video'
-import { useAppSelector } from '../store/store'
+// eslint-disable-next-line simple-import-sort/imports
+import { useEffect } from 'react'
+
+import { Module } from '../components/module'
+import { Header } from '../components/header'
+import { Video } from '../components/video'
+import { useAppSelector } from '../store'
+import { useCurrentLesson } from '../store/slices/player'
 
 export function Player() {
+  const { currentLesson } = useCurrentLesson()
   const modules = useAppSelector((store) => store.player.course.modules)
+
+  useEffect(() => {
+    document.title = `${currentLesson.title}`
+  }, [currentLesson])
 
   return (
     <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
