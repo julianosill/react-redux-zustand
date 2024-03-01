@@ -5,6 +5,8 @@ import { useCurrentLesson } from '../store/slices/player'
 export function Header() {
   const { currentModule, currentLesson } = useCurrentLesson()
 
+  if (!currentModule || !currentLesson) return null
+
   return (
     <header className="flex items-center justify-between">
       <div>
