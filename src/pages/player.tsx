@@ -1,19 +1,17 @@
-// eslint-disable-next-line simple-import-sort/imports
 import { useEffect } from 'react'
 
-import { Module } from '../components/module'
 import { Header } from '../components/header'
+import { Module } from '../components/module'
 import { Video } from '../components/video'
-import { useAppDispatch, useAppSelector } from '../store'
-import { loadCourse, useCurrentLesson } from '../store/slices/player'
+import { useCurrentLesson, useStore } from '../zustand-store'
 
 export function Player() {
-  const dispatch = useAppDispatch()
-  const modules = useAppSelector((store) => store.player.course?.modules)
+  const { course, load } = useStore()
   const { currentLesson } = useCurrentLesson()
 
   useEffect(() => {
-    dispatch(loadCourse())
+    load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -32,8 +30,8 @@ export function Player() {
           </div>
 
           <aside className="w-80 absolute top-0 bottom-0 right-0 border-l divide-y-2 divide-zinc-900 border-zinc-800 bg-zinc-900 overflow-y-auto scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800">
-            {modules &&
-              modules.map((module, index) => (
+            {course?.modules &&
+              course.modules.map((module, index) => (
                 <Module
                   key={module.id}
                   moduleIndex={index}

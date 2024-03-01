@@ -1,23 +1,24 @@
 import { Loader2 } from 'lucide-react'
 import ReactPlayer from 'react-player/lazy'
 
-import { useAppDispatch, useAppSelector } from '../store'
-import { next, useCurrentLesson } from '../store/slices/player'
+import { useCurrentLesson, useStore } from '../zustand-store'
 
 export function Video() {
-  const dispatch = useAppDispatch()
   const { currentLesson } = useCurrentLesson()
-  const isCourseLoading = useAppSelector((store) => store.player.isLoading)
+  const { isLoading, next } = useStore((store) => {
+    return {
+      isLoading: store.isLoading,
+      next: store.next,
+    }
+  })
 
   function handlePlayNext() {
-    dispatch(next())
+    next()
   }
-
-  if (!currentLesson) return null
 
   return (
     <div className="w-full bg-zinc-950 aspect-video">
-      {isCourseLoading ? (
+      {isLoading ? (
         <div className="flex h-full items-center justify-center">
           <Loader2 className="size-6 text-zinc-400 animate-spin" />
         </div>
@@ -27,7 +28,7 @@ export function Video() {
           height="100%"
           controls
           onEnded={handlePlayNext}
-          url={`https://www.youtube.com/watch?v=${currentLesson.id}`}
+          url={`https://www.youtube.com/watch?v=${currentLesson?.id}`}
         />
       )}
     </div>
